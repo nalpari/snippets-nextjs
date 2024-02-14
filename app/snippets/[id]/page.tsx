@@ -1,12 +1,13 @@
-import { db } from "@/db";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { FaHome, FaTrash, FaUserEdit } from "react-icons/fa";
+import { db } from '@/db'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { FaHome, FaTrash, FaUserEdit } from 'react-icons/fa'
+import * as actions from '@/actions'
 
 interface SnippetShowPageProps {
   params: {
-    id: string;
-  };
+    id: string
+  }
 }
 
 export default async function SnippetShowPage(props: SnippetShowPageProps) {
@@ -14,11 +15,13 @@ export default async function SnippetShowPage(props: SnippetShowPageProps) {
     where: {
       id: parseInt(props.params.id),
     },
-  });
+  })
 
   if (!snippet) {
-    return notFound();
+    return notFound()
   }
+
+  const deleteSnippetAction = actions.deleteSnippet.bind(null, snippet.id)
 
   return (
     <>
@@ -35,12 +38,14 @@ export default async function SnippetShowPage(props: SnippetShowPageProps) {
             >
               <FaUserEdit />
             </Link>
-            <Link
-              className="border rounded border-slate-200 p-2"
-              href={`/snippets/${snippet.id}/edit`}
-            >
-              <FaTrash />
-            </Link>
+            <form action={deleteSnippetAction}>
+              <button
+                type="submit"
+                className="border rounded border-slate-200 p-2"
+              >
+                <FaTrash />
+              </button>
+            </form>
           </div>
         </div>
         <div className="flex flex-col gap-4 m-2">
@@ -51,5 +56,5 @@ export default async function SnippetShowPage(props: SnippetShowPageProps) {
         </div>
       </div>
     </>
-  );
+  )
 }

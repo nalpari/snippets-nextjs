@@ -1,9 +1,9 @@
-import { db } from "@/db";
-import Link from "next/link";
-import { FaReadme, FaSave } from "react-icons/fa";
+import { db } from '@/db'
+import Link from 'next/link'
+import { FaReadme, FaSave } from 'react-icons/fa'
 
 export default async function Home() {
-  const snippets = await db.snippet.findMany();
+  const snippets = await db.snippet.findMany()
 
   const renderedSnippets = snippets.map((snippet) => (
     <Link
@@ -16,7 +16,7 @@ export default async function Home() {
         <FaReadme />
       </div>
     </Link>
-  ));
+  ))
 
   return (
     <>
@@ -33,5 +33,5 @@ export default async function Home() {
         <div>{renderedSnippets}</div>
       </div>
     </>
-  );
+  )
 }
