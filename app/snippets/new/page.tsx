@@ -1,25 +1,14 @@
-import { redirect } from "next/navigation";
-import { db } from "@/db";
-import Link from "next/link";
-import { FaHome } from "react-icons/fa";
+'use client'
+
+import { useFormState } from 'react-dom'
+import Link from 'next/link'
+import { FaHome } from 'react-icons/fa'
+import * as actions from '@/actions'
 
 export default function SnippetCreatePage() {
-  async function createSnippet(formData: FormData) {
-    "use server";
-
-    const title = formData.get("title") as string;
-    const code = formData.get("code") as string;
-
-    const snippet = await db.snippet.create({
-      data: {
-        title,
-        code,
-      },
-    });
-
-    console.log(snippet);
-    redirect("/");
-  }
+  const [formState, action] = useFormState(actions.createSnippet, {
+    message: '',
+  })
 
   return (
     <div>
@@ -30,7 +19,7 @@ export default function SnippetCreatePage() {
         </Link>
       </div>
       <div className="m-2">
-        <form action={createSnippet}>
+        <form action={action}>
           <div className="flex flex-col gap-4">
             <div className="flex gap-4">
               <label htmlFor="title" className="w-12">
@@ -55,6 +44,12 @@ export default function SnippetCreatePage() {
               />
             </div>
 
+            {formState.message && (
+              <div className="my-2 p-2 bg-red-200 border rounded border-red-400">
+                {formState.message}
+              </div>
+            )}
+
             <button type="submit" className="rounded p-2 bg-blue-200">
               Create
             </button>
@@ -62,5 +57,5 @@ export default function SnippetCreatePage() {
         </form>
       </div>
     </div>
-  );
+  )
 }
